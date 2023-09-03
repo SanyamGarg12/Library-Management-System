@@ -64,7 +64,10 @@ class Member {
 
     public void MyBooks() {
         for (Book b : mybooks) {
-            System.out.printf("ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n" + "Available Copies: " + b.AvailableCopies() + "\n");
+            System.out.printf(
+                    "ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n"
+                            + "Available Copies: " +
+                            b.AvailableCopies() + "\n");
         }
     }
 
@@ -89,7 +92,10 @@ class Member {
         if (this.mybooks.indexOf(b) + 1 == 1) {
             returntime1 = new Date();
             if (this.viewFine() != 0) {
-                System.out.println("Book ID: " + b.id + " successfully returned. " + this.viewFine() + " Rupees has been charged for a delay of " + (this.returntime1.getTime() - this.issuetime1.getTime() - 10000) / 1000 + "\n");
+                System.out.println("Book ID: " + b.id + " successfully returned. " + this.viewFine()
+                        + " Rupees has been charged for a delay of " + (this.returntime1.getTime()
+                                - this.issuetime1.getTime() - 10000) / 1000
+                        + "\n");
             } else {
                 System.out.println("Book Returned Sucessfully!\n");
             }
@@ -97,7 +103,10 @@ class Member {
         if (this.mybooks.indexOf(b) + 1 == 2) {
             returntime2 = new Date();
             if (this.fine != 0) {
-                System.out.println("Book ID: " + b.id + " successfully returned. " + this.viewFine() + " Rupees has been charged for a delay of " + (this.returntime2.getTime() - this.issuetime2.getTime() - 10000) / 1000 + "\n");
+                System.out.println("Book ID: " + b.id + " successfully returned. " + this.viewFine()
+                        + " Rupees has been charged for a delay of " + (this.returntime2.getTime()
+                                - this.issuetime2.getTime() - 10000) / 1000
+                        + "\n");
             } else {
                 System.out.println("Book Returned Sucessfully!\n");
             }
@@ -159,14 +168,20 @@ class Librarian {
 
     public void viewBooks() {
         for (Book b : Books) {
-            System.out.printf("ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n" + "Available Copies: " + b.AvailableCopies() + "\n");
+            System.out.printf(
+                    "ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n"
+                            + "Available Copies: " +
+                            b.AvailableCopies() + "\n");
         }
     }
 
     public void viewAvailableBooks() {
         for (Book b : Books) {
             if (b.AvailableCopies() != 0)
-                System.out.printf("ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n" + "Available Copies: " + b.AvailableCopies() + "\n");
+                System.out.printf(
+                        "ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n"
+                                + "Available Copies: " +
+                                b.AvailableCopies() + "\n");
         }
     }
 
@@ -178,7 +193,7 @@ class Librarian {
     }
 }
 
-public class Main {
+public class ass {
     public static void main(String[] args) {
         Librarian Sanyam = new Librarian();
         Scanner sc = new Scanner(System.in);
@@ -228,7 +243,8 @@ public class Main {
                             for (Member m : Sanyam.Members) {
                                 if (i == index) {
                                     if (m.limit != 0) {
-                                        System.out.println("This member can not be removed as he have some books issued to him\n");
+                                        System.out.println(
+                                                "This member can not be removed as he have some books issued to him\n");
                                     } else {
                                         System.out.println("Member " + m.name + " is removed successfully!\n");
                                         Sanyam.RemoveMember(m);
@@ -252,7 +268,7 @@ public class Main {
                     } else if (k == 4) {
                         System.out.println("BOOK_ID: ");
                         int d = sc.nextInt();
-                        sc.nextLine();
+
                         Book dump = Sanyam.Books.get(d - 1);
                         if (dump.issued == 0) {
                             Sanyam.RemoveBook(dump);
@@ -263,7 +279,8 @@ public class Main {
                     } else if (k == 5) {
                         int i = 1;
                         for (Member m : Sanyam.Members) {
-                            System.out.println("Member ID : " + (i++) + "\n" + "Books Owned : \n" + m.viewFine() + "\n");
+                            System.out
+                                    .println("Member ID : " + (i++) + "\n" + "Books Owned : \n" + m.viewFine() + "\n");
                             m.MyBooks();
                         }
                     } else if (k == 6) {
@@ -277,6 +294,7 @@ public class Main {
                 }
             } else if (operation == 2) {
                 System.out.println("Name : ");
+                sc.nextLine();
                 String name = sc.nextLine();
                 System.out.println("Phone No. : ");
                 long Phone = sc.nextLong();
@@ -289,7 +307,8 @@ public class Main {
                     }
                 }
                 if (test == -1) {
-                    System.out.println("Member with Name: " + name + " and Phone No: " + Phone + " doesn't exist.\n");
+                    System.out
+                            .println("Member with Name: " + name + " and Phone No: " + Phone + " doesn't exist.\n");
                     break;
                 }
                 System.out.println("Welcome!\n");
@@ -324,10 +343,12 @@ public class Main {
                                     if (res == 1) {
                                         System.out.println("Book issued Successfully!\n");
                                     } else {
-                                        System.out.println("Either your limit of issuing is reached or enough copies are not available");
+                                        System.out.println(
+                                                "Either your limit of issuing is reached or enough copies are not available");
                                     }
                                 } else {
-                                    System.out.println("Pay fine of " + student.viewFine() + " for book ID: " + student.mybooks.get(0).id + " before issuing another book\n");
+                                    System.out.println("Pay fine of " + student.viewFine() + " for book ID: "
+                                            + student.mybooks.get(0).id + " before issuing another book\n");
                                 }
                                 break;
                             }
@@ -337,7 +358,8 @@ public class Main {
                             continue;
                         }
                         if (i == -2) {
-                            System.out.println("One copy of requeste book is already with member, so we can not issue this book again!\n");
+                            System.out.println(
+                                    "One copy of requeste book is already with member, so we can not issue this book again!\n");
                         }
                     } else if (k == 4) {
                         System.out.println("BOOK_ID: ");
