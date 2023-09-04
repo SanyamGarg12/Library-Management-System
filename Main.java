@@ -1,204 +1,15 @@
-// ASSUMPTION : ID of Member is its (index number + 1) in Members named ArrayList in Librarian class!
+// ASSUMPTION 1 : ID of Member is its phone number*2 as it is unique!
+// ASSUMPTION 2 : ID of all copies of a book is same for them as now one member cant issue the same book twice!!
+package org.example;
 
-import java.util.Date;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-class Book {
-    public String author;
-    public String title;
-    public int copies;
-    public int id;
-    public int issued = 0;
-
-    public Book(String author, String title, int x) {
-        this.author = author;
-        this.title = title;
-        this.copies = x;
-    }
-
-    public void setAuthor(String s) {
-        this.author = s;
-    }
-
-    public void setTitle(String s) {
-        this.title = s;
-    }
-
-    public void setCopies(int s) {
-        this.copies = s;
-    }
-
-    public String getAuthor() {
-        return this.author;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public int AvailableCopies() {
-        return this.copies - this.issued;
-    }
-
-}
-
-class Member {
-    public String name;
-    public int age;
-    public long contact;
-    public int limit;
-    public long fine = 0;
-    public ArrayList<Book> mybooks = new ArrayList<Book>();
-    public Date issuetime1; // for book 1
-    public Date issuetime2; // for book 2
-    public Date returntime1; // for book 1
-    public Date returntime2; // for book 2
-
-    public Member(String name, int age, long contact) {
-        this.name = name;
-        this.age = age;
-        this.contact = contact;
-        this.limit = 0;
-    }
-
-    public void MyBooks() {
-        for (Book b : mybooks) {
-            System.out.printf(
-                    "ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n"
-                            + "Available Copies: " +
-                            b.AvailableCopies() + "\n");
-        }
-    }
-
-    public int IssueBook(Book b) {
-        if (this.limit <= 2 && b.copies - b.issued != 0) {
-            this.mybooks.add(b);
-            b.issued += 1;
-            if (this.limit == 0) {
-                issuetime1 = new Date();
-            } else if (this.limit == 1) {
-                issuetime2 = new Date();
-            }
-            this.limit += 1;
-            return 1;
-        } else {
-            return -1;
-        }
-    }
-
-    public Book returnBook(Book b) {
-        b.issued -= 1;
-        if (this.mybooks.indexOf(b) + 1 == 1) {
-            returntime1 = new Date();
-            if (this.viewFine() != 0) {
-                System.out.println("Book ID: " + b.id + " successfully returned. " + this.viewFine()
-                        + " Rupees has been charged for a delay of " + (this.returntime1.getTime()
-                                - this.issuetime1.getTime() - 10000) / 1000
-                        + "\n");
-            } else {
-                System.out.println("Book Returned Sucessfully!\n");
-            }
-        }
-        if (this.mybooks.indexOf(b) + 1 == 2) {
-            returntime2 = new Date();
-            if (this.fine != 0) {
-                System.out.println("Book ID: " + b.id + " successfully returned. " + this.viewFine()
-                        + " Rupees has been charged for a delay of " + (this.returntime2.getTime()
-                                - this.issuetime2.getTime() - 10000) / 1000
-                        + "\n");
-            } else {
-                System.out.println("Book Returned Sucessfully!\n");
-            }
-        }
-        this.fine = 0;
-        issuetime1 = null;
-        issuetime2 = null;
-        this.mybooks.remove(b);
-        b.issued -= 1;
-        this.limit -= 1;
-        return b;
-    }
-
-    public void payFine() {
-        issuetime1 = new Date();
-        issuetime2 = new Date();
-        this.fine = 0;
-    }
-
-    public long viewFine() {
-        returntime1 = new Date();
-        returntime2 = new Date();
-        if (issuetime1 != null) {
-            long t1 = (this.returntime1.getTime() - this.issuetime1.getTime()) / 1000;
-            if (t1 - 10 > 0) {
-                this.fine = (t1 - 10) * 3;
-            }
-        }
-        if (this.issuetime2 != null) {
-            long t2 = (this.returntime2.getTime() - this.issuetime2.getTime()) / 1000;
-            if (t2 - 10 > 0) {
-                this.fine += (t2 - 10) * 3;
-            }
-        }
-        return this.fine;
-    }
-}
-
-class Librarian {
-    public ArrayList<Member> Members = new ArrayList<Member>();
-    public ArrayList<Book> Books = new ArrayList<Book>();
-
-    public void AddMember(Member n) {
-        this.Members.add(n);
-    }
-
-    public void RemoveMember(Member n) {
-        this.Members.remove(n);
-    }
-
-    public void AddBook(Book b) {
-        this.Books.add(b);
-        b.id = Books.size();
-    }
-
-    public void RemoveBook(Book b) {
-        this.Books.remove(b);
-    }
-
-    public void viewBooks() {
-        for (Book b : Books) {
-            System.out.printf(
-                    "ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n"
-                            + "Available Copies: " +
-                            b.AvailableCopies() + "\n");
-        }
-    }
-
-    public void viewAvailableBooks() {
-        for (Book b : Books) {
-            if (b.AvailableCopies() != 0)
-                System.out.printf(
-                        "ID : " + b.id + "\n" + "Author: " + b.getAuthor() + "\n" + "Title: " + b.getTitle() + "\n"
-                                + "Available Copies: " +
-                                b.AvailableCopies() + "\n");
-        }
-    }
-
-    public void viewMembers() {
-        int i = 0;
-        for (Member m : Members) {
-            System.out.printf(++i + ". " + m.name + ", " + m.contact + ", " + m.age + "\n");
-        }
-    }
-}
-
-public class ass {
+public class Main {
     public static void main(String[] args) {
         Librarian Sanyam = new Librarian();
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.printf("1.Enter as a librarian\n2.Enter as a member\n3.Exit\n");
+            System.out.println("1.Enter as a librarian\n2.Enter as a member\n3.Exit\n");
             int operation = sc.nextInt();
             if (operation == 1) {
                 while (true) {
@@ -229,19 +40,25 @@ public class ass {
                         if (tester == -1) {
                             Member k1 = new Member(name, age, contact);
                             Sanyam.AddMember(k1);
-                            System.out.println("Member with id " + Sanyam.Members.size() + " is added succesfully\n");
+                            System.out.println("Member with id " + k1.id + " is added successfully\n");
                         }
                     } else if (k == 2) {
                         System.out.println("Enter Member ID to remove from the below list\n");
                         Sanyam.viewMembers();
                         int index = sc.nextInt();
                         sc.nextLine();
-                        if (Sanyam.Members.size() < index) {
+                        int test = -1;
+                        for (Member m : Sanyam.Members) {
+                            if (m.id == index) {
+                                test = 1;
+                                break;
+                            }
+                        }
+                        if (test == -1) {
                             System.out.println("Such Member doesnt exist...Select query again!\n");
                         } else {
-                            int i = 1;
                             for (Member m : Sanyam.Members) {
-                                if (i == index) {
+                                if (m.id == index) {
                                     if (m.limit != 0) {
                                         System.out.println(
                                                 "This member can not be removed as he have some books issued to him\n");
@@ -251,7 +68,6 @@ public class ass {
                                     }
                                     break;
                                 }
-                                i++;
                             }
                         }
 
@@ -274,13 +90,13 @@ public class ass {
                             Sanyam.RemoveBook(dump);
                             System.out.println("Book_id: " + dump.id + " removed successfully!\n");
                         } else {
-                            System.out.println("Book can not be removed as it is issed to someone!\n");
+                            System.out.println("Book can not be removed as it is issued to someone!\n");
                         }
                     } else if (k == 5) {
-                        int i = 1;
                         for (Member m : Sanyam.Members) {
                             System.out
-                                    .println("Member ID : " + (i++) + "\n" + "Books Owned : \n" + m.viewFine() + "\n");
+                                    .println("Member ID : " + m.id + "\n" + "Books Owned : \n" + m.viewFine()
+                                            + " rupees\n");
                             m.MyBooks();
                         }
                     } else if (k == 6) {
@@ -309,7 +125,7 @@ public class ass {
                 if (test == -1) {
                     System.out
                             .println("Member with Name: " + name + " and Phone No: " + Phone + " doesn't exist.\n");
-                    break;
+                    continue;
                 }
                 System.out.println("Welcome!\n");
                 while (true) {
@@ -334,11 +150,11 @@ public class ass {
                         for (Book b : Sanyam.Books) {
                             if (b.id == book_id && book_name.equals(b.title)) {
                                 i = 1;
-                                if (student.limit == 1 && student.mybooks.indexOf(b) != -1) {
+                                if (student.limit == 1 && student.mybooks.contains(b)) {
                                     i = -2;
                                     break;
                                 }
-                                if (student.fine == 0) {
+                                if (student.viewFine() == 0) {
                                     int res = student.IssueBook(b);
                                     if (res == 1) {
                                         System.out.println("Book issued Successfully!\n");
@@ -359,7 +175,7 @@ public class ass {
                         }
                         if (i == -2) {
                             System.out.println(
-                                    "One copy of requeste book is already with member, so we can not issue this book again!\n");
+                                    "One copy of requested book is already with member, so we can not issue this book again!\n");
                         }
                     } else if (k == 4) {
                         System.out.println("BOOK_ID: ");
